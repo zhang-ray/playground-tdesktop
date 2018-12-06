@@ -2,28 +2,9 @@
 setlocal EnableDelayedExpansion
 set "FullScriptPath=%~dp0"
 set "FullExecPath=%cd%"
+set "BuildTarget="
 
-set "Silence=>nul"
-if "%1" == "-v" set "Silence="
 
-if exist "%FullScriptPath%..\build\target" (
-  FOR /F "tokens=1* delims= " %%i in (%FullScriptPath%..\build\target) do set "BuildTarget=%%i"
-) else (
-  set "BuildTarget="
-)
-
-rem strangely linking of Release Telegram build complains about the absence of lib.pdb
-if exist "%FullScriptPath%..\..\..\Libraries\openssl\tmp32\lib.pdb" (
-  if not exist "%FullScriptPath%..\..\..\Libraries\openssl\Release\lib\lib.pdb" (
-    xcopy "%FullScriptPath%..\..\..\Libraries\openssl\tmp32\lib.pdb" "%FullScriptPath%..\..\..\Libraries\openssl\Release\lib\" %Silence%
-  )
-)
-
-set BUILD_DEFINES=
-if not "%TDESKTOP_BUILD_DEFINES%" == "" (
-  set "BUILD_DEFINES=-Dbuild_defines=%TDESKTOP_BUILD_DEFINES%"
-  echo [INFO] Set build defines to !BUILD_DEFINES!
-)
 
 set GYP_MSVS_VERSION=2017
 
@@ -41,7 +22,5 @@ exit /b
 
 :error
 echo FAILED
-if exist "%FullScriptPath%..\..\msbuild.log" del "%FullScriptPath%..\..\msbuild.log"
-if exist "%FullScriptPath%..\..\environment.x86" del "%FullScriptPath%..\..\environment.x86"
 cd "%FullExecPath%"
 exit /b 1
