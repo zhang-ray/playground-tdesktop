@@ -5,7 +5,6 @@ SET LIB_DIR=%BUILD_DIR%\Libraries
 SET SRC_DIR=%BUILD_DIR%\tdesktop
 SET QT_VERSION=5_6_2
 
-call:configureBuild
 call:getDependencies
 call:setupGYP
 cd %SRC_DIR%
@@ -49,40 +48,4 @@ GOTO:EOF
     git submodule update
     cd %SRC_DIR%\Telegram
     call gyp\refresh.bat
-GOTO:EOF
-
-:configureBuild
-    call:logInfo "Configuring build"
-    call:logInfo "Build version: %BUILD_VERSION%"
-    set TDESKTOP_BUILD_DEFINES=
-
-    echo %BUILD_VERSION% | findstr /C:"disable_register_custom_scheme">nul && (
-        set TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES%,TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME
-    )
-
-    echo %BUILD_VERSION% | findstr /C:"disable_crash_reports">nul && (
-        set TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES%,TDESKTOP_DISABLE_CRASH_REPORTS
-    )
-
-    echo %BUILD_VERSION% | findstr /C:"disable_network_proxy">nul && (
-        set TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES%,TDESKTOP_DISABLE_NETWORK_PROXY
-    )
-
-    echo %BUILD_VERSION% | findstr /C:"disable_desktop_file_generation">nul && (
-        set TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES%,TDESKTOP_DISABLE_DESKTOP_FILE_GENERATION
-    )
-
-    echo %BUILD_VERSION% | findstr /C:"disable_unity_integration">nul && (
-        set TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES%,TDESKTOP_DISABLE_UNITY_INTEGRATION
-    )
-
-    echo %BUILD_VERSION% | findstr /C:"disable_gtk_integration">nul && (
-        set TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES%,TDESKTOP_DISABLE_GTK_INTEGRATION
-    )
-
-    if not "%TDESKTOP_BUILD_DEFINES%" == "" (
-        set "TDESKTOP_BUILD_DEFINES=%TDESKTOP_BUILD_DEFINES:~1%"
-    )
-
-    call:logInfo "Build Defines: %TDESKTOP_BUILD_DEFINES%"
 GOTO:EOF
