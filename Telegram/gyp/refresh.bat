@@ -1,4 +1,4 @@
-@echo OFF
+
 setlocal EnableDelayedExpansion
 set "FullScriptPath=%~dp0"
 set "FullExecPath=%cd%"
@@ -35,22 +35,6 @@ if %errorlevel% neq 0 goto error
 cd ../..
 
 rem looks like ninja build works without sdk 7.1 which was used by generating custom environment.arch files
-
-rem cd "%FullScriptPath%"
-rem call gyp --depth=. --generator-output=../.. -Goutput_dir=out -Gninja_use_custom_environment_files=1 Telegram.gyp --format=ninja
-rem if %errorlevel% neq 0 goto error
-rem call gyp --depth=. --generator-output=../.. -Goutput_dir=out -Gninja_use_custom_environment_files=1 Telegram.gyp --format=msvs-ninja
-rem if %errorlevel% neq 0 goto error
-rem cd ../..
-
-rem call msbuild /target:SetBuildDefaultEnvironmentVariables Telegram.vcxproj /fileLogger %Silence%
-rem if %errorlevel% neq 0 goto error
-
-rem call python "%FullScriptPath%create_env.py"
-rem if %errorlevel% neq 0 goto error
-
-rem call move environment.x86 out\Debug\ %Silence%
-rem if %errorlevel% neq 0 goto error
 
 cd "%FullExecPath%"
 exit /b
