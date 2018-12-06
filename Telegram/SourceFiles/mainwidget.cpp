@@ -77,8 +77,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "mtproto/dc_options.h"
 #include "core/file_utilities.h"
 #include "core/update_checker.h"
-#include "calls/calls_instance.h"
-#include "calls/calls_top_bar.h"
 #include "export/export_settings.h"
 #include "export/view/export_view_top_bar.h"
 #include "export/view/export_view_panel_controller.h"
@@ -271,8 +269,7 @@ MainWidget::MainWidget(
 			handleAudioUpdate(audioId);
 		}
 	});
-	subscribe(Auth().calls().currentCallChanged(), [this](Calls::Call *call) { setCurrentCall(call); });
-
+	
 	Auth().data().currentExportView(
 	) | rpl::start_with_next([=](Export::View::PanelController *view) {
 		setCurrentExportView(view);
@@ -1479,52 +1476,19 @@ void MainWidget::playerHeightUpdated() {
 	}
 }
 
-void MainWidget::setCurrentCall(Calls::Call *call) {
-	_currentCall = call;
-	if (_currentCall) {
-		subscribe(_currentCall->stateChanged(), [this](Calls::Call::State state) {
-			using State = Calls::Call::State;
-			if (state == State::Established) {
-				createCallTopBar();
-			} else {
-				destroyCallTopBar();
-			}
-		});
-	} else {
-		destroyCallTopBar();
-	}
-}
+
 
 void MainWidget::createCallTopBar() {
-	Expects(_currentCall != nullptr);
 
-	_callTopBar.create(this, object_ptr<Calls::TopBar>(this, _currentCall));
-	_callTopBar->heightValue(
-	) | rpl::start_with_next([this](int value) {
-		callTopBarHeightUpdated(value);
-	}, lifetime());
-	orderWidgets();
-	if (_a_show.animating()) {
-		_callTopBar->show(anim::type::instant);
-		_callTopBar->setVisible(false);
-	} else {
-		_callTopBar->hide(anim::type::instant);
-		_callTopBar->show(anim::type::normal);
-		_callTopBarHeight = _contentScrollAddToY = _callTopBar->height();
-		updateControlsGeometry();
-	}
+
 }
 
 void MainWidget::destroyCallTopBar() {
-	if (_callTopBar) {
-		_callTopBar->hide(anim::type::normal);
-	}
+	
 }
 
 void MainWidget::callTopBarHeightUpdated(int callTopBarHeight) {
-	if (!callTopBarHeight && !_currentCall) {
-		_callTopBar.destroyDelayed();
-	}
+	
 	if (callTopBarHeight != _callTopBarHeight) {
 		_contentScrollAddToY += callTopBarHeight - _callTopBarHeight;
 		_callTopBarHeight = callTopBarHeight;
@@ -2441,9 +2405,7 @@ void MainWidget::orderWidgets() {
 	if (_exportTopBar) {
 		_exportTopBar->raise();
 	}
-	if (_callTopBar) {
-		_callTopBar->raise();
-	}
+	
 	if (_playerVolume) {
 		_playerVolume->raise();
 	}
@@ -2790,10 +2752,7 @@ void MainWidget::updateControlsGeometry() {
 	auto mainSectionTop = getMainSectionTop();
 	auto dialogsWidth = qRound(_a_dialogsWidth.current(_dialogsWidth));
 	if (Adaptive::OneColumn()) {
-		if (_callTopBar) {
-			_callTopBar->resizeToWidth(dialogsWidth);
-			_callTopBar->moveToLeft(0, 0);
-		}
+		
 		if (_exportTopBar) {
 			_exportTopBar->resizeToWidth(dialogsWidth);
 			_exportTopBar->moveToLeft(0, _callTopBarHeight);
@@ -2832,10 +2791,7 @@ void MainWidget::updateControlsGeometry() {
 				st::lineWidth,
 				height());
 		}
-		if (_callTopBar) {
-			_callTopBar->resizeToWidth(mainSectionWidth);
-			_callTopBar->moveToLeft(dialogsWidth, 0);
-		}
+		
 		if (_exportTopBar) {
 			_exportTopBar->resizeToWidth(mainSectionWidth);
 			_exportTopBar->moveToLeft(dialogsWidth, _callTopBarHeight);
@@ -4821,7 +4777,7 @@ void MainWidget::feedUpdate(const MTPUpdate &update) {
 	} break;
 
 	case mtpc_updatePhoneCall: {
-		Calls::Current().handleUpdate(update.c_updatePhoneCall());
+		
 	} break;
 
 	case mtpc_updateUserBlocked: {

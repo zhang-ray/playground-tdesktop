@@ -11,7 +11,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "data/data_session.h"
 #include "media/media_audio.h"
 #include "media/media_audio_capture.h"
-#include "calls/calls_instance.h"
 #include "history/history.h"
 #include "history/history_item.h"
 #include "data/data_media_types.h"
@@ -58,12 +57,7 @@ Instance::Instance()
 	// While we have one Media::Player::Instance for all authsessions we have to do this.
 	auto handleAuthSessionChange = [this] {
 		if (AuthSession::Exists()) {
-			subscribe(Auth().calls().currentCallChanged(), [this](Calls::Call *call) {
-				if (call) {
-					pause(AudioMsgId::Type::Voice);
-					pause(AudioMsgId::Type::Song);
-				}
-			});
+			
 		} else {
 			handleLogout();
 		}

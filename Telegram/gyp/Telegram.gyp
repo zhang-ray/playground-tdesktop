@@ -25,7 +25,6 @@
         '<(res_loc)/colors.palette',
         '<(res_loc)/basic.style',
         '<(src_loc)/boxes/boxes.style',
-        '<(src_loc)/calls/calls.style',
         '<(src_loc)/dialogs/dialogs.style',
         '<(src_loc)/export/view/export.style',
         '<(src_loc)/history/history.style',
@@ -69,7 +68,6 @@
       'codegen.gyp:codegen_numbers',
       'codegen.gyp:codegen_style',
       'utils.gyp:Updater',
-      '../ThirdParty/libtgvoip/libtgvoip.gyp:libtgvoip',
       'crl.gyp:crl',
       'lib_base.gyp:lib_base',
       'lib_export.gyp:lib_export',
@@ -79,7 +77,6 @@
     'defines': [
       'AL_LIBTYPE_STATIC',
       'AL_ALEXT_PROTOTYPES',
-      'TGVOIP_USE_CXX11_LIB',
       'XXH_INLINE_ALL',
       '<!@(python -c "for s in \'<(build_defines)\'.split(\',\'): print(s)")',
     ],

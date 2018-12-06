@@ -21,7 +21,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "shortcuts.h"
 #include "auth_session.h"
 #include "apiwrap.h"
-#include "calls/calls_instance.h"
 #include "lang/lang_file_parser.h"
 #include "lang/lang_translator.h"
 #include "lang/lang_cloud_manager.h"
@@ -1174,9 +1173,7 @@ void Messenger::QuitAttempt() {
 		if (Auth().api().isQuitPrevent()) {
 			prevents = true;
 		}
-		if (Auth().calls().isQuitPrevent()) {
-			prevents = true;
-		}
+		
 	}
 	if (prevents) {
 		Instance().quitDelayed();

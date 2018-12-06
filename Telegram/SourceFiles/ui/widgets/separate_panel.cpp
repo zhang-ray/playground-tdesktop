@@ -21,7 +21,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "messenger.h"
 #include "styles/style_widgets.h"
 #include "styles/style_info.h"
-#include "styles/style_calls.h"
+
 
 namespace Ui {
 
@@ -164,52 +164,11 @@ void SeparatePanel::initLayout() {
 }
 
 void SeparatePanel::createBorderImage() {
-	const auto shadowPadding = st::callShadow.extend;
-	const auto cacheSize = st::separatePanelBorderCacheSize;
-	auto cache = QImage(
-		cacheSize * cIntRetinaFactor(),
-		cacheSize * cIntRetinaFactor(),
-		QImage::Format_ARGB32_Premultiplied);
-	cache.setDevicePixelRatio(cRetinaFactor());
-	cache.fill(Qt::transparent);
-	{
-		Painter p(&cache);
-		auto inner = QRect(0, 0, cacheSize, cacheSize).marginsRemoved(
-			shadowPadding);
-		Ui::Shadow::paint(p, inner, cacheSize, st::callShadow);
-		p.setCompositionMode(QPainter::CompositionMode_Source);
-		p.setBrush(st::windowBg);
-		p.setPen(Qt::NoPen);
-		PainterHighQualityEnabler hq(p);
-		p.drawRoundedRect(
-			myrtlrect(inner),
-			st::callRadius,
-			st::callRadius);
-	}
-	_borderParts = App::pixmapFromImageInPlace(std::move(cache));
 }
 
 void SeparatePanel::toggleOpacityAnimation(bool visible) {
 	if (_visible == visible) {
 		return;
-	}
-
-	_visible = visible;
-	if (_useTransparency) {
-		if (_animationCache.isNull()) {
-			showControls();
-			_animationCache = Ui::GrabWidget(this);
-			hideChildren();
-		}
-		_opacityAnimation.start(
-			[this] { opacityCallback(); },
-			_visible ? 0. : 1.,
-			_visible ? 1. : 0.,
-			st::callPanelDuration,
-			_visible ? anim::easeOutCirc : anim::easeInCirc);
-	}
-	if (isHidden() && _visible) {
-		show();
 	}
 }
 
@@ -250,13 +209,7 @@ void SeparatePanel::finishClose() {
 }
 
 int SeparatePanel::hideGetDuration() {
-	LOG(("Export Info: Panel Hide Requested."));
-	toggleOpacityAnimation(false);
-	if (_animationCache.isNull()) {
-		finishClose();
-		return 0;
-	}
-	return st::callPanelDuration;
+	return 0;
 }
 
 void SeparatePanel::showBox(
@@ -337,21 +290,7 @@ void SeparatePanel::setInnerSize(QSize size) {
 }
 
 void SeparatePanel::initGeometry(QSize size) {
-	const auto center = Messenger::Instance().getPointForCallPanelCenter();
-	_useTransparency = Platform::TranslucentWindowsSupported(center);
-	_padding = _useTransparency
-		? st::callShadow.extend
-		: style::margins(
-			st::lineWidth,
-			st::lineWidth,
-			st::lineWidth,
-			st::lineWidth);
-	setAttribute(Qt::WA_OpaquePaintEvent, !_useTransparency);
-	const auto screen = QApplication::desktop()->screenGeometry(center);
-	const auto rect = QRect(QPoint(), size);
-	setGeometry(
-		rect.translated(center - rect.center()).marginsAdded(_padding));
-	updateControlsGeometry();
+	
 }
 
 void SeparatePanel::updateGeometry(QSize size) {
@@ -416,83 +355,7 @@ void SeparatePanel::paintEvent(QPaintEvent *e) {
 }
 
 void SeparatePanel::paintShadowBorder(Painter &p) const {
-	const auto factor = cIntRetinaFactor();
-	const auto size = st::separatePanelBorderCacheSize;
-	const auto part1 = size / 3;
-	const auto part2 = size - part1;
-	const auto corner = QSize(part1, part1) * factor;
-
-	const auto topleft = QRect(QPoint(0, 0), corner);
-	p.drawPixmap(QRect(0, 0, part1, part1), _borderParts, topleft);
-
-	const auto topright = QRect(QPoint(part2, 0) * factor, corner);
-	p.drawPixmap(
-		QRect(width() - part1, 0, part1, part1),
-		_borderParts,
-		topright);
-
-	const auto bottomleft = QRect(QPoint(0, part2) * factor, corner);
-	p.drawPixmap(
-		QRect(0, height() - part1, part1, part1),
-		_borderParts,
-		bottomleft);
-
-	const auto bottomright = QRect(QPoint(part2, part2) * factor, corner);
-	p.drawPixmap(
-		QRect(width() - part1, height() - part1, part1, part1),
-		_borderParts,
-		bottomright);
-
-	const auto left = QRect(
-		QPoint(0, part1) * factor,
-		QSize(_padding.left(), part2 - part1) * factor);
-	p.drawPixmap(
-		QRect(0, part1, _padding.left(), height() - 2 * part1),
-		_borderParts,
-		left);
-
-	const auto top = QRect(
-		QPoint(part1, 0) * factor,
-		QSize(part2 - part1, _padding.top() + st::callRadius) * factor);
-	p.drawPixmap(
-		QRect(
-			part1,
-			0,
-			width() - 2 * part1,
-			_padding.top() + st::callRadius),
-		_borderParts,
-		top);
-
-	const auto right = QRect(
-		QPoint(size - _padding.right(), part1) * factor,
-		QSize(_padding.right(), part2 - part1) * factor);
-	p.drawPixmap(
-		QRect(
-			width() - _padding.right(),
-			part1,
-			_padding.right(),
-			height() - 2 * part1),
-		_borderParts,
-		right);
-
-	const auto bottom = QRect(
-		QPoint(part1, size - _padding.bottom() - st::callRadius) * factor,
-		QSize(part2 - part1, _padding.bottom() + st::callRadius) * factor);
-	p.drawPixmap(
-		QRect(
-			part1,
-			height() - _padding.bottom() - st::callRadius,
-			width() - 2 * part1,
-			_padding.bottom() + st::callRadius),
-		_borderParts,
-		bottom);
-
-	p.fillRect(
-		_padding.left(),
-		_padding.top() + st::callRadius,
-		width() - _padding.left() - _padding.right(),
-		height() - _padding.top() - _padding.bottom() - 2 * st::callRadius,
-		st::windowBg);
+	
 }
 
 void SeparatePanel::paintOpaqueBorder(Painter &p) const {

@@ -27,7 +27,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "ui/effects/radial_animation.h"
 #include "window/window_controller.h"
 #include "window/window_peer_menu.h"
-#include "calls/calls_instance.h"
 #include "data/data_peer_values.h"
 #include "data/data_feed.h"
 #include "observer_peer.h"
@@ -170,7 +169,6 @@ void TopBarWidget::onSearch() {
 void TopBarWidget::onCall() {
 	if (const auto peer = _activeChat.peer()) {
 		if (const auto user = peer->asUser()) {
-			Calls::Current().startOutgoingCall(user);
 		}
 	}
 }

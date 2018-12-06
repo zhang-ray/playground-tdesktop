@@ -20,7 +20,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "ui/widgets/dropdown_menu.h"
 #include "ui/wrap/fade_wrap.h"
 #include "ui/search_field_controller.h"
-#include "calls/calls_instance.h"
 #include "window/window_controller.h"
 #include "window/window_slide_animation.h"
 #include "window/window_peer_menu.h"
@@ -476,7 +475,6 @@ void WrapWidget::addProfileCallsButton() {
 					? st::infoLayerTopBarCall
 					: st::infoTopBarCall))
 		)->addClickHandler([=] {
-			Calls::Current().startOutgoingCall(user);
 		});
 	}, _topBar->lifetime());
 

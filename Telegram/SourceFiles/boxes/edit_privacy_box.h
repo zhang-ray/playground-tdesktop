@@ -13,9 +13,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 enum LangKey : int;
 
-namespace Calls {
-enum class PeerToPeer;
-} // namespace Calls
 
 namespace Ui {
 class VerticalLayout;

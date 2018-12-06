@@ -46,8 +46,6 @@
 <(src_loc)/boxes/passcode_box.h
 <(src_loc)/boxes/photo_crop_box.cpp
 <(src_loc)/boxes/photo_crop_box.h
-<(src_loc)/boxes/rate_call_box.cpp
-<(src_loc)/boxes/rate_call_box.h
 <(src_loc)/boxes/report_box.cpp
 <(src_loc)/boxes/report_box.h
 <(src_loc)/boxes/self_destruction_box.cpp
@@ -64,18 +62,6 @@
 <(src_loc)/boxes/stickers_box.h
 <(src_loc)/boxes/username_box.cpp
 <(src_loc)/boxes/username_box.h
-<(src_loc)/calls/calls_box_controller.cpp
-<(src_loc)/calls/calls_box_controller.h
-<(src_loc)/calls/calls_call.cpp
-<(src_loc)/calls/calls_call.h
-<(src_loc)/calls/calls_emoji_fingerprint.cpp
-<(src_loc)/calls/calls_emoji_fingerprint.h
-<(src_loc)/calls/calls_instance.cpp
-<(src_loc)/calls/calls_instance.h
-<(src_loc)/calls/calls_panel.cpp
-<(src_loc)/calls/calls_panel.h
-<(src_loc)/calls/calls_top_bar.cpp
-<(src_loc)/calls/calls_top_bar.h
 <(src_loc)/chat_helpers/bot_keyboard.cpp
 <(src_loc)/chat_helpers/bot_keyboard.h
 <(src_loc)/chat_helpers/emoji_list_widget.cpp

@@ -15,7 +15,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "auth_session.h"
 #include "storage/localstorage.h"
 #include "history/history.h"
-#include "calls/calls_instance.h"
 #include "ui/widgets/checkbox.h"
 #include "ui/wrap/vertical_layout.h"
 #include "boxes/peer_list_controllers.h"
@@ -370,47 +369,9 @@ rpl::producer<QString> CallsPrivacyController::exceptionsDescription() {
 
 Fn<void()> CallsPrivacyController::setupAdditional(
 		not_null<Ui::VerticalLayout*> container) {
-	using PeerToPeer = Calls::PeerToPeer;
-	const auto convert = [](PeerToPeer value) {
-		switch (value) {
-		case PeerToPeer::DefaultContacts: return Option::Contacts;
-		case PeerToPeer::DefaultEveryone: return Option::Everyone;
-		case PeerToPeer::Everyone: return Option::Everyone;
-		case PeerToPeer::Contacts: return Option::Contacts;
-		case PeerToPeer::Nobody: return Option::Nobody;
-		}
-		Unexpected("Calls::PeerToPeer value.");
-	};
-	const auto group = std::make_shared<Ui::RadioenumGroup<Option>>(
-		convert(Auth().settings().callsPeerToPeer()));
-	const auto changed = Ui::AttachAsChild(container, false);
-	group->setChangedCallback([=](Option) {
-		*changed = true;
-	});
-
-	AddDivider(container);
-	AddSkip(container);
-	AddSubsectionTitle(container, lng_settings_peer_to_peer);
-	EditPrivacyBox::AddOption(container, group, Option::Everyone);
-	EditPrivacyBox::AddOption(container, group, Option::Contacts);
-	EditPrivacyBox::AddOption(container, group, Option::Nobody);
-	EditPrivacyBox::AddLabel(
-		container,
-		Lang::Viewer(lng_settings_peer_to_peer_about));
-	AddSkip(container);
-
+			
 	return [=] {
-		if (*changed) {
-			Auth().settings().setCallsPeerToPeer([&] {
-				switch (group->value()) {
-				case Option::Everyone: return PeerToPeer::Everyone;
-				case Option::Contacts: return PeerToPeer::Contacts;
-				case Option::Nobody: return PeerToPeer::Nobody;
-				}
-				Unexpected("PeerToPeer edit value.");
-			}());
-			Auth().saveSettingsDelayed();
-		}
+		
 	};
 }
 

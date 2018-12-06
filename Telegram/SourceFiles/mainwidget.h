@@ -69,10 +69,6 @@ struct SectionShow;
 enum class Column;
 } // namespace Window
 
-namespace Calls {
-class Call;
-class TopBar;
-} // namespace Calls
 
 namespace InlineBots {
 namespace Layout {
@@ -411,7 +407,6 @@ private:
 	void closeBothPlayers();
 	void playerHeightUpdated();
 
-	void setCurrentCall(Calls::Call *call);
 	void createCallTopBar();
 	void destroyCallTopBar();
 	void callTopBarHeightUpdated(int callTopBarHeight);
@@ -539,8 +534,6 @@ private:
 	std::unique_ptr<Window::SectionMemento> _thirdSectionFromStack;
 	base::unique_qptr<Window::ConnectingWidget> _connecting;
 
-	base::weak_ptr<Calls::Call> _currentCall;
-	object_ptr<Ui::SlideWrap<Calls::TopBar>> _callTopBar = { nullptr };
 
 	Export::View::PanelController *_currentExportView = nullptr;
 	object_ptr<Window::TopBarWrapWidget<Export::View::TopBar>> _exportTopBar

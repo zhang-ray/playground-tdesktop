@@ -30,7 +30,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "window/main_window.h"
 #include "window/window_controller.h"
 #include "styles/style_history.h"
-#include "calls/calls_instance.h"
 #include "ui/empty_userpic.h"
 #include "ui/grouped_layout.h"
 #include "ui/text_options.h"
@@ -3261,7 +3260,6 @@ QSize HistoryCall::countOptimalSize() {
 	const auto user = _parent->data()->history()->peer->asUser();
 	_link = std::make_shared<LambdaClickHandler>([=] {
 		if (user) {
-			Calls::Current().startOutgoingCall(user);
 		}
 	});
 

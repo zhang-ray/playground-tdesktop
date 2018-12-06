@@ -26,7 +26,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "observer_peer.h"
 #include "auth_session.h"
 #include "window/notifications_manager.h"
-#include "calls/calls_instance.h"
 #include "storage/storage_facade.h"
 #include "storage/storage_shared_media.h"
 #include "storage/storage_feed_messages.h"
@@ -1221,7 +1220,7 @@ void History::applyServiceChanges(
 	} break;
 
 	case mtpc_messageActionPhoneCall: {
-		Calls::Current().newServiceMessage().notify(item->fullId());
+		
 	} break;
 	}
 }

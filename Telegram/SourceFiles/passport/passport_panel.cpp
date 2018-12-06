@@ -16,7 +16,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "lang/lang_keys.h"
 #include "styles/style_passport.h"
 #include "styles/style_widgets.h"
-#include "styles/style_calls.h"
 
 namespace Passport {
 

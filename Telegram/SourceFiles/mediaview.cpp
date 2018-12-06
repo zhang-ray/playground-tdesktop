@@ -32,7 +32,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "messenger.h"
 #include "layout.h"
 #include "storage/file_download.h"
-#include "calls/calls_instance.h"
 #include "styles/style_mediaview.h"
 #include "styles/style_history.h"
 
@@ -97,11 +96,7 @@ MediaView::MediaView()
 					updateControls();
 				}
 			});
-			subscribe(Auth().calls().currentCallChanged(), [this](Calls::Call *call) {
-				if (call && _clipController && !_videoPaused) {
-					onVideoPauseResume();
-				}
-			});
+			
 			subscribe(Auth().documentUpdated, [this](DocumentData *document) {
 				if (!isHidden()) {
 					documentUpdated(document);

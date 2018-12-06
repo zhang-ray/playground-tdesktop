@@ -28,9 +28,6 @@ namespace Data {
 class Session;
 } // namespace Data
 
-namespace Calls {
-enum class PeerToPeer;
-} // namespace Calls
 
 namespace Storage {
 class Downloader;
@@ -45,9 +42,6 @@ class System;
 enum class Column;
 } // namespace Window
 
-namespace Calls {
-class Instance;
-} // namespace Calls
 
 namespace ChatHelpers {
 enum class SelectorTab;
@@ -183,15 +177,6 @@ public:
 		_variables.groupStickersSectionHidden.remove(peerId);
 	}
 
-	rpl::producer<Calls::PeerToPeer> callsPeerToPeerValue() const {
-		return _variables.callsPeerToPeer.value();
-	}
-	Calls::PeerToPeer callsPeerToPeer() const {
-		return _variables.callsPeerToPeer.current();
-	}
-	void setCallsPeerToPeer(Calls::PeerToPeer value) {
-		_variables.callsPeerToPeer = value;
-	}
 
 private:
 	struct Variables {
@@ -216,8 +201,6 @@ private:
 			= kDefaultDialogsWidthRatio; // per-window
 		rpl::variable<int> thirdColumnWidth
 			= kDefaultThirdColumnWidth; // per-window
-		rpl::variable<Calls::PeerToPeer> callsPeerToPeer
-			= Calls::PeerToPeer();
 		Ui::InputSubmitSettings sendSubmitWay;
 
 		Support::SwitchSettings supportSwitch;
@@ -288,9 +271,6 @@ public:
 		return *_api;
 	}
 
-	Calls::Instance &calls() {
-		return *_calls;
-	}
 
 	void checkAutoLock();
 	void checkAutoLockIn(TimeMs time);
@@ -318,7 +298,6 @@ private:
 	base::Timer _autoLockTimer;
 
 	const std::unique_ptr<ApiWrap> _api;
-	const std::unique_ptr<Calls::Instance> _calls;
 	const std::unique_ptr<Storage::Downloader> _downloader;
 	const std::unique_ptr<Storage::Uploader> _uploader;
 	const std::unique_ptr<Storage::Facade> _storage;

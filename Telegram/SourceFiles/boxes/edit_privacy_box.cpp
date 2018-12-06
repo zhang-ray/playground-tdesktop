@@ -16,7 +16,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "boxes/peer_list_controllers.h"
 #include "info/profile/info_profile_button.h"
 #include "settings/settings_common.h"
-#include "calls/calls_instance.h"
 #include "base/binary_guard.h"
 #include "lang/lang_keys.h"
 #include "apiwrap.h"

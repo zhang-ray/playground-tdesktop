@@ -21,7 +21,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "support/support_templates.h"
 #include "boxes/about_box.h"
 #include "boxes/peer_list_controllers.h"
-#include "calls/calls_box_controller.h"
 #include "lang/lang_keys.h"
 #include "core/click_handler_types.h"
 #include "observer_peer.h"
@@ -110,9 +109,7 @@ void MainMenu::refreshMenu() {
 		}, &st::mainMenuContacts, &st::mainMenuContactsOver);
 		if (Global::PhoneCallsEnabled()) {
 			_menu->addAction(lang(lng_menu_calls), [] {
-				Ui::show(Box<PeerListBox>(std::make_unique<Calls::BoxController>(), [](not_null<PeerListBox*> box) {
-					box->addButton(langFactory(lng_close), [box] { box->closeBox(); });
-				}));
+				
 			}, &st::mainMenuCalls, &st::mainMenuCallsOver);
 		}
 	} else {
