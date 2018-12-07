@@ -11,8 +11,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "auth_session.h"
 #include "apiwrap.h"
 #include "messenger.h"
-#include "export/export_controller.h"
-#include "export/view/export_view_panel_controller.h"
 #include "window/notifications_manager.h"
 #include "history/history.h"
 #include "history/history_item_components.h"
@@ -88,88 +86,29 @@ void Session::startExport(PeerData *peer) {
 }
 
 void Session::startExport(const MTPInputPeer &singlePeer) {
-	if (_exportPanel) {
-		_exportPanel->activatePanel();
-		return;
-	}
-	_export = std::make_unique<Export::ControllerWrap>(singlePeer);
-	_exportPanel = std::make_unique<Export::View::PanelController>(
-		_export.get());
-
-	_exportViewChanges.fire(_exportPanel.get());
-
-	_exportPanel->stopRequests(
-	) | rpl::start_with_next([=] {
-		LOG(("Export Info: Stop requested."));
-		stopExport();
-	}, _export->lifetime());
 }
 
 void Session::suggestStartExport(TimeId availableAt) {
-	_exportAvailableAt = availableAt;
-	suggestStartExport();
 }
 
 void Session::clearExportSuggestion() {
-	_exportAvailableAt = 0;
-	if (_exportSuggestion) {
-		_exportSuggestion->closeBox();
-	}
 }
 
 void Session::suggestStartExport() {
-	if (_exportAvailableAt <= 0) {
-		return;
-	}
-
-	const auto now = unixtime();
-	const auto left = (_exportAvailableAt <= now)
-		? 0
-		: (_exportAvailableAt - now);
-	if (left) {
-		App::CallDelayed(
-			std::min(left + 5, 3600) * TimeMs(1000),
-			_session,
-			[=] { suggestStartExport(); });
-	} else if (_export) {
-		Export::View::ClearSuggestStart();
-	} else {
-		_exportSuggestion = Export::View::SuggestStart();
-	}
 }
 
 rpl::producer<Export::View::PanelController*> Session::currentExportView(
 ) const {
-	return _exportViewChanges.events_starting_with(_exportPanel.get());
 }
 
 bool Session::exportInProgress() const {
-	return _export != nullptr;
+	return true;
 }
 
 void Session::stopExportWithConfirmation(FnMut<void()> callback) {
-	if (!_exportPanel) {
-		callback();
-		return;
-	}
-	auto closeAndCall = [=, callback = std::move(callback)]() mutable {
-		auto saved = std::move(callback);
-		LOG(("Export Info: Stop With Confirmation."));
-		stopExport();
-		if (saved) {
-			saved();
-		}
-	};
-	_exportPanel->stopWithConfirmation(std::move(closeAndCall));
 }
 
 void Session::stopExport() {
-	if (_exportPanel) {
-		LOG(("Export Info: Destroying."));
-		_exportPanel = nullptr;
-		_exportViewChanges.fire(nullptr);
-	}
-	_export = nullptr;
 }
 
 const Passport::SavedCredentials *Session::passportCredentials() const {

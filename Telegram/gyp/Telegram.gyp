@@ -26,7 +26,6 @@
         '<(res_loc)/basic.style',
         '<(src_loc)/boxes/boxes.style',
         '<(src_loc)/dialogs/dialogs.style',
-        '<(src_loc)/export/view/export.style',
         '<(src_loc)/history/history.style',
         '<(src_loc)/info/info.style',
         '<(src_loc)/intro/intro.style',
@@ -70,8 +69,8 @@
       'utils.gyp:Updater',
       'crl.gyp:crl',
       'lib_base.gyp:lib_base',
-      'lib_export.gyp:lib_export',
       'lib_storage.gyp:lib_storage',
+      'lib_scheme.gyp:lib_scheme',
     ],
 
     'defines': [

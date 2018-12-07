@@ -177,16 +177,6 @@
 <(src_loc)/dialogs/dialogs_search_from_controllers.h
 <(src_loc)/dialogs/dialogs_widget.cpp
 <(src_loc)/dialogs/dialogs_widget.h
-<(src_loc)/export/view/export_view_content.cpp
-<(src_loc)/export/view/export_view_content.h
-<(src_loc)/export/view/export_view_panel_controller.cpp
-<(src_loc)/export/view/export_view_panel_controller.h
-<(src_loc)/export/view/export_view_progress.cpp
-<(src_loc)/export/view/export_view_progress.h
-<(src_loc)/export/view/export_view_settings.cpp
-<(src_loc)/export/view/export_view_settings.h
-<(src_loc)/export/view/export_view_top_bar.cpp
-<(src_loc)/export/view/export_view_top_bar.h
 <(src_loc)/history/admin_log/history_admin_log_filter.cpp
 <(src_loc)/history/admin_log/history_admin_log_filter.h
 <(src_loc)/history/admin_log/history_admin_log_inner.cpp

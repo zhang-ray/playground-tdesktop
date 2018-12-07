@@ -16,7 +16,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "boxes/send_files_box.h"
 #include "window/themes/window_theme.h"
 #include "ui/widgets/input_fields.h"
-#include "export/export_settings.h"
 #include "core/crash_reports.h"
 #include "core/update_checker.h"
 #include "observer_peer.h"
